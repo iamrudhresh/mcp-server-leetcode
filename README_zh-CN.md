@@ -1,11 +1,11 @@
 # LeetCode MCP 服务器
 
-[![NPM Version](https://img.shields.io/npm/v/@jinzcdev/leetcode-mcp-server.svg)](https://www.npmjs.com/package/@jinzcdev/leetcode-mcp-server)
+[![NPM Version](https://img.shields.io/npm/v/@iamrudhresh/mcp-server-leetcode.svg)](https://www.npmjs.com/package/@iamrudhresh/mcp-server-leetcode)
 [![English Doc](https://img.shields.io/badge/docs-English-blue)](README.md)
-[![NPM Downloads](https://img.shields.io/npm/dm/@jinzcdev/leetcode-mcp-server.svg)](https://www.npmjs.com/package/@jinzcdev/leetcode-mcp-server)
-[![GitHub License](https://img.shields.io/github/license/jinzcdev/leetcode-mcp-server.svg)](./LICENSE)
-[![LeetCode MCP Server on Glama](https://glama.ai/mcp/servers/jinzcdev/leetcode-mcp-server/badges/score.svg)](https://glama.ai/mcp/servers/jinzcdev/leetcode-mcp-server)
-[![Stars](https://img.shields.io/github/stars/jinzcdev/leetcode-mcp-server)](https://github.com/jinzcdev/leetcode-mcp-server)
+[![NPM Downloads](https://img.shields.io/npm/dm/@iamrudhresh/mcp-server-leetcode.svg)](https://www.npmjs.com/package/@iamrudhresh/mcp-server-leetcode)
+[![GitHub License](https://img.shields.io/github/license/iamrudhresh/mcp-server-leetcode.svg)](./LICENSE)
+[![LeetCode MCP Server on Glama](https://glama.ai/mcp/servers/iamrudhresh/mcp-server-leetcode/badges/score.svg)](https://glama.ai/mcp/servers/iamrudhresh/mcp-server-leetcode)
+[![Stars](https://img.shields.io/github/stars/iamrudhresh/mcp-server-leetcode)](https://github.com/iamrudhresh/mcp-server-leetcode)
 
 LeetCode MCP Server 是一个基于 [模型上下文协议 (MCP)](https://modelcontextprotocol.io/introduction) 的服务，提供与 LeetCode API 的无缝集成，实现与 LeetCode 编程题目、竞赛、题解和用户数据的高级自动化和智能交互。
 
@@ -28,23 +28,23 @@ LeetCode MCP Server 是一个基于 [模型上下文协议 (MCP)](https://modelc
 
 ```bash
 # 从 npm 安装
-npm install @jinzcdev/leetcode-mcp-server -g
+npm install @iamrudhresh/mcp-server-leetcode -g
 
 # 使用中国站点配置运行（stdio 传输，默认）
-npx -y @jinzcdev/leetcode-mcp-server --site cn
+npx -y @iamrudhresh/mcp-server-leetcode --site cn
 
 # 使用认证运行（访问私有数据）
-npx -y @jinzcdev/leetcode-mcp-server --site cn --session <您的 LEETCODE 会话 COOKIE>
+npx -y @iamrudhresh/mcp-server-leetcode --site cn --session <您的 LEETCODE 会话 COOKIE>
 
 # 以 Streamable HTTP 服务器模式运行
-npx -y @jinzcdev/leetcode-mcp-server --transport http --port 3000 --site cn
+npx -y @iamrudhresh/mcp-server-leetcode --transport http --port 3000 --site cn
 ```
 
 或者，您可以克隆仓库并在本地运行：
 
 ```bash
 # 克隆仓库
-git clone https://github.com/jinzcdev/leetcode-mcp-server.git
+git clone https://github.com/iamrudhresh/mcp-server-leetcode.git
 
 # 导航到项目目录
 cd leetcode-mcp-server
@@ -90,7 +90,7 @@ node build/index.js --transport http --port 3000 --site cn
   "mcpServers": {
     "leetcode": {
       "command": "npx",
-      "args": ["-y", "@jinzcdev/leetcode-mcp-server"],
+      "args": ["-y", "@iamrudhresh/mcp-server-leetcode"],
       "env": {
         "LEETCODE_SITE": "cn",
         "LEETCODE_SESSION": "<您的 LEETCODE 会话 COOKIE>"
@@ -109,7 +109,7 @@ node build/index.js --transport http --port 3000 --site cn
       "command": "npx",
       "args": [
         "-y",
-        "@jinzcdev/leetcode-mcp-server",
+        "@iamrudhresh/mcp-server-leetcode",
         "--site",
         "cn",
         "--session",
@@ -131,7 +131,7 @@ node build/index.js --transport http --port 3000 --site cn
 首先以 HTTP 模式启动服务器：
 
 ```bash
-npx -y @jinzcdev/leetcode-mcp-server --transport http --port 3000 --site cn
+npx -y @iamrudhresh/mcp-server-leetcode --transport http --port 3000 --site cn
 ```
 
 然后在 MCP 客户端中连接到该服务器：
@@ -150,7 +150,7 @@ npx -y @jinzcdev/leetcode-mcp-server --transport http --port 3000 --site cn
 如需访问需要认证的接口，启动服务器时传入会话 cookie：
 
 ```bash
-npx -y @jinzcdev/leetcode-mcp-server --transport http --port 3000 --site cn --session <您的 LEETCODE 会话 COOKIE>
+npx -y @iamrudhresh/mcp-server-leetcode --transport http --port 3000 --site cn --session <您的 LEETCODE 会话 COOKIE>
 ```
 
 > [!NOTE]

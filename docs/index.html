@@ -116,9 +116,9 @@
             <div class="code-glass p-2.5 rounded-2xl flex items-center justify-between border border-gray-800 shadow-2xl">
                 <div class="flex items-center space-x-3 pl-2 overflow-x-auto text-xs sm:text-sm font-mono text-gray-300">
                     <span class="text-orange-500">$</span>
-                    <span>npx -y @jinzcdev/leetcode-mcp-server</span>
+                    <span>npx -y @iamrudhresh/mcp-server-leetcode</span>
                 </div>
-                <button onclick="copySnippet('npx -y @jinzcdev/leetcode-mcp-server', this)" class="px-4 py-2 rounded-xl bg-orange-600 hover:bg-orange-500 text-white text-xs font-semibold flex items-center space-x-1.5 transition">
+                <button onclick="copySnippet('npx -y @iamrudhresh/mcp-server-leetcode', this)" class="px-4 py-2 rounded-xl bg-orange-600 hover:bg-orange-500 text-white text-xs font-semibold flex items-center space-x-1.5 transition">
                     <span>Copy</span>
                 </button>
             </div>
@@ -533,7 +533,7 @@
                     mcpServers: {
                         leetcode: {
                             command: "npx",
-                            args: ["-y", "@jinzcdev/leetcode-mcp-server"],
+                            args: ["-y", "@iamrudhresh/mcp-server-leetcode"],
                             env: envObj
                         }
                     }
@@ -541,7 +541,7 @@
                 configText = JSON.stringify(config, null, 2);
             } else if (activeClient === 'cursor') {
                 fileEl.innerText = '.cursor/mcp.json';
-                const args = ["-y", "@jinzcdev/leetcode-mcp-server", "--site", site];
+                const args = ["-y", "@iamrudhresh/mcp-server-leetcode", "--site", site];
                 if (auth === 'auth') args.push("--session", "<YOUR_COOKIE>");
                 if (transport === 'http') args.push("--transport", "http");
 
@@ -559,7 +559,7 @@
                     mcpServers: {
                         leetcode: {
                             command: "npx",
-                            args: ["-y", "@jinzcdev/leetcode-mcp-server"],
+                            args: ["-y", "@iamrudhresh/mcp-server-leetcode"],
                             env: {
                                 LEETCODE_SITE: site,
                                 LEETCODE_SESSION: auth === 'auth' ? "<YOUR_SESSION_COOKIE>" : ""
@@ -575,7 +575,7 @@
                     mcpServers: {
                         "leetcode-mcp-server": {
                             command: "npx",
-                            args: ["-y", "@jinzcdev/leetcode-mcp-server", "--site", site],
+                            args: ["-y", "@iamrudhresh/mcp-server-leetcode", "--site", site],
                             env: auth === 'auth' ? { LEETCODE_SESSION: "<YOUR_SESSION_COOKIE>" } : {}
                         }
                     }
@@ -585,7 +585,7 @@
                 configText = `version: "3.8"
 services:
   leetcode-mcp:
-    image: jinzcdev/leetcode-mcp-server:latest
+    image: iamrudhresh/mcp-server-leetcode:latest
     ports:
       - "3000:3000"
     environment:

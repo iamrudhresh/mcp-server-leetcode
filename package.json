@@ -1,8 +1,8 @@
 {
-    "name": "@jinzcdev/leetcode-mcp-server",
+    "name": "@iamrudhresh/mcp-server-leetcode",
     "description": "MCP Server for LeetCode API (supports leetcode.com and leetcode.cn)",
     "version": "1.5.1",
-    "author": "jinzcdev",
+    "author": "iamrudhresh",
     "main": "./build/index.js",
     "keywords": [
         "leetcode",
@@ -23,6 +23,7 @@
         "lint:fix": "eslint . --fix"
     },
     "bin": {
+        "mcp-server-leetcode": "build/index.js",
         "leetcode-mcp-server": "build/index.js"
     },
     "type": "module",
@@ -30,6 +31,10 @@
         "build"
     ],
     "license": "MIT",
+    "homepage": "https://iamrudhresh.github.io/mcp-server-leetcode/",
+    "bugs": {
+        "url": "https://github.com/iamrudhresh/mcp-server-leetcode/issues"
+    },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/iamrudhresh/mcp-server-leetcode.git"

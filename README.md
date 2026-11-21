@@ -1,11 +1,11 @@
 # LeetCode MCP Server
 
-[![NPM Version](https://img.shields.io/npm/v/@jinzcdev/leetcode-mcp-server.svg)](https://www.npmjs.com/package/@jinzcdev/leetcode-mcp-server)
+[![NPM Version](https://img.shields.io/npm/v/@iamrudhresh/mcp-server-leetcode.svg)](https://www.npmjs.com/package/@iamrudhresh/mcp-server-leetcode)
 [![Chinese Doc](https://img.shields.io/badge/docs-中文-blue)](README_zh-CN.md)
-[![NPM Downloads](https://img.shields.io/npm/dm/@jinzcdev/leetcode-mcp-server.svg)](https://www.npmjs.com/package/@jinzcdev/leetcode-mcp-server)
-[![GitHub License](https://img.shields.io/github/license/jinzcdev/leetcode-mcp-server.svg)](./LICENSE)
-[![LeetCode MCP Server on Glama](https://glama.ai/mcp/servers/jinzcdev/leetcode-mcp-server/badges/score.svg)](https://glama.ai/mcp/servers/jinzcdev/leetcode-mcp-server)
-[![Stars](https://img.shields.io/github/stars/jinzcdev/leetcode-mcp-server)](https://github.com/jinzcdev/leetcode-mcp-server)
+[![NPM Downloads](https://img.shields.io/npm/dm/@iamrudhresh/mcp-server-leetcode.svg)](https://www.npmjs.com/package/@iamrudhresh/mcp-server-leetcode)
+[![GitHub License](https://img.shields.io/github/license/iamrudhresh/mcp-server-leetcode.svg)](./LICENSE)
+[![LeetCode MCP Server on Glama](https://glama.ai/mcp/servers/iamrudhresh/mcp-server-leetcode/badges/score.svg)](https://glama.ai/mcp/servers/iamrudhresh/mcp-server-leetcode)
+[![Stars](https://img.shields.io/github/stars/iamrudhresh/mcp-server-leetcode)](https://github.com/iamrudhresh/mcp-server-leetcode)
 [![Docs](https://img.shields.io/badge/docs-GitHub%20Pages-orange)](docs/index.html)
 
 The LeetCode MCP Server is a [Model Context Protocol (MCP)](https://modelcontextprotocol.io/introduction) server that provides seamless integration with LeetCode APIs, enabling advanced automation and intelligent interaction with LeetCode's programming problems, contests, solutions, and user data.
@@ -35,23 +35,23 @@ The LeetCode MCP Server is a [Model Context Protocol (MCP)](https://modelcontext
 
 ```bash
 # Install from npm
-npm install @jinzcdev/leetcode-mcp-server -g
+npm install @iamrudhresh/mcp-server-leetcode -g
 
 # Run with Global site configuration (stdio transport, default)
-npx -y @jinzcdev/leetcode-mcp-server --site global
+npx -y @iamrudhresh/mcp-server-leetcode --site global
 
 # Run with authentication (for accessing private data)
-npx -y @jinzcdev/leetcode-mcp-server --site global --session <YOUR_LEETCODE_SESSION_COOKIE>
+npx -y @iamrudhresh/mcp-server-leetcode --site global --session <YOUR_LEETCODE_SESSION_COOKIE>
 
 # Run as a Streamable HTTP server
-npx -y @jinzcdev/leetcode-mcp-server --transport http --port 3000 --site global
+npx -y @iamrudhresh/mcp-server-leetcode --transport http --port 3000 --site global
 ```
 
 Alternatively, you can clone the repository and run it locally:
 
 ```bash
 # Clone the repository
-git clone https://github.com/jinzcdev/leetcode-mcp-server.git
+git clone https://github.com/iamrudhresh/mcp-server-leetcode.git
 
 # Navigate to the project directory
 cd leetcode-mcp-server
@@ -97,7 +97,7 @@ Add the following server entry to your MCP client configuration file:
   "mcpServers": {
     "leetcode": {
       "command": "npx",
-      "args": ["-y", "@jinzcdev/leetcode-mcp-server"],
+      "args": ["-y", "@iamrudhresh/mcp-server-leetcode"],
       "env": {
         "LEETCODE_SITE": "global",
         "LEETCODE_SESSION": "<YOUR_LEETCODE_SESSION_COOKIE>"
@@ -116,7 +116,7 @@ Add the following server entry to your MCP client configuration file:
       "command": "npx",
       "args": [
         "-y",
-        "@jinzcdev/leetcode-mcp-server",
+        "@iamrudhresh/mcp-server-leetcode",
         "--site",
         "global",
         "--session",
@@ -138,7 +138,7 @@ For LeetCode China site, modify the `--site` parameter to `cn`.
 First, start the server in HTTP mode:
 
 ```bash
-npx -y @jinzcdev/leetcode-mcp-server --transport http --port 3000 --site global
+npx -y @iamrudhresh/mcp-server-leetcode --transport http --port 3000 --site global
 ```
 
 Then connect your MCP client to the running server:
@@ -157,7 +157,7 @@ Then connect your MCP client to the running server:
 To use authenticated endpoints, pass the session cookie when starting the server:
 
 ```bash
-npx -y @jinzcdev/leetcode-mcp-server --transport http --port 3000 --site global --session <YOUR_LEETCODE_SESSION_COOKIE>
+npx -y @iamrudhresh/mcp-server-leetcode --transport http --port 3000 --site global --session <YOUR_LEETCODE_SESSION_COOKIE>
 ```
 
 > [!NOTE]
