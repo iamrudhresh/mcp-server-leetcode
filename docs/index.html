@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LeetCode MCP Server | Official Documentation & Showcase</title>
+    <meta name="description" content="Production-ready Model Context Protocol (MCP) Server for LeetCode API (leetcode.com and leetcode.cn) with stdio and Streamable HTTP support.">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#fff7ed',
+                            100: '#ffedd5',
+                            500: '#f97316',
+                            600: '#ea580c',
+                            700: '#c2410c'
+                        },
+                        darkbg: '#0B0F17',
+                        cardbg: '#111827',
+                        cardborder: '#1F2937'
+                    },
+                    fontFamily: {
+                        mono: ['JetBrains Mono', 'Fira Code', 'Courier New', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .glass {
+            background: rgba(17, 24, 39, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .code-glass {
+            background: rgba(10, 15, 24, 0.85);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #FFA116 0%, #FF6B00 50%, #EF4444 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .badge-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .6; }
+        }
+    </style>
+</head>
+<body class="bg-darkbg text-slate-200 min-h-screen antialiased selection:bg-brand-500 selection:text-white">
+
+    <!-- Top Navigation Bar -->
+    <nav class="fixed top-0 inset-x-0 z-50 glass border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-600 flex items-center justify-center shadow-lg shadow-orange-500/20 font-mono font-black text-white text-lg">
+                    LC
+                </div>
+                <div>
+                    <span class="font-bold text-lg text-white tracking-tight">LeetCode</span>
+                    <span class="text-xs px-2 py-0.5 ml-1.5 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30 font-mono">MCP SERVER</span>
+                </div>
+            </div>
+            <div class="hidden md:flex items-center space-x-6 text-sm font-medium text-gray-300">
+                <a href="#features" class="hover:text-orange-400 transition">Features</a>
+                <a href="#configurator" class="hover:text-orange-400 transition">Client Setup</a>
+                <a href="#tools" class="hover:text-orange-400 transition">Tools & Prompts</a>
+                <a href="#architecture" class="hover:text-orange-400 transition">Architecture</a>
+                <a href="#ecosystem" class="hover:text-orange-400 transition">Ecosystem</a>
+            </div>
+            <div class="flex items-center space-x-3">
+                <a href="https://github.com/iamrudhresh/mcp-server-leetcode" target="_blank" class="flex items-center space-x-2 text-xs font-medium px-3.5 py-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-200 border border-gray-700 transition shadow">
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                    <span>GitHub</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Header -->
+    <header class="pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center relative overflow-hidden">
+        <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-gradient-to-tr from-orange-500/15 to-red-500/15 blur-[120px] rounded-full pointer-events-none"></div>
+        
+        <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/30 text-orange-400 text-xs font-medium mb-6">
+            <span class="w-2 h-2 rounded-full bg-orange-500 badge-pulse"></span>
+            <span>Model Context Protocol Standard Compliant</span>
+            <span class="text-gray-500">|</span>
+            <span class="text-gray-300">v1.5.1 Enhanced</span>
+        </div>
+
+        <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight">
+            Supercharge AI Coding with <br>
+            <span class="gradient-text">LeetCode MCP Server</span>
+        </h1>
+
+        <p class="max-w-3xl mx-auto text-lg sm:text-xl text-gray-400 mb-10 leading-relaxed font-normal">
+            Equip your AI assistants (Claude, Cursor, Cline, Antigravity) with full access to 
+            <strong class="text-gray-200">3,000+ problems</strong>, contest schedules, live code execution, 
+            editorial solutions, community discussions, and personal progress across 
+            <span class="text-orange-400 font-medium">LeetCode Global</span> and <span class="text-orange-400 font-medium">LeetCode China</span>.
+        </p>
+
+        <!-- Command Pill -->
+        <div class="max-w-xl mx-auto mb-10">
+            <div class="code-glass p-2.5 rounded-2xl flex items-center justify-between border border-gray-800 shadow-2xl">
+                <div class="flex items-center space-x-3 pl-2 overflow-x-auto text-xs sm:text-sm font-mono text-gray-300">
+                    <span class="text-orange-500">$</span>
+                    <span>npx -y @jinzcdev/leetcode-mcp-server</span>
+                </div>
+                <button onclick="copySnippet('npx -y @jinzcdev/leetcode-mcp-server', this)" class="px-4 py-2 rounded-xl bg-orange-600 hover:bg-orange-500 text-white text-xs font-semibold flex items-center space-x-1.5 transition">
+                    <span>Copy</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Badges Bar -->
+        <div class="flex flex-wrap items-center justify-center gap-3 text-xs font-mono text-gray-400">
+            <span class="px-3 py-1 rounded-lg bg-gray-900 border border-gray-800 flex items-center gap-1.5">
+                <span class="text-green-400">●</span> 30+ Tools
+            </span>
+            <span class="px-3 py-1 rounded-lg bg-gray-900 border border-gray-800 flex items-center gap-1.5">
+                <span class="text-blue-400">●</span> 4 MCP Prompts
+            </span>
+            <span class="px-3 py-1 rounded-lg bg-gray-900 border border-gray-800 flex items-center gap-1.5">
+                <span class="text-purple-400">●</span> 5 Resources
+            </span>
+            <span class="px-3 py-1 rounded-lg bg-gray-900 border border-gray-800 flex items-center gap-1.5">
+                <span class="text-amber-400">●</span> stdio & Streamable HTTP
+            </span>
+            <span class="px-3 py-1 rounded-lg bg-gray-900 border border-gray-800 flex items-center gap-1.5">
+                <span class="text-red-400">●</span> leetcode.com & leetcode.cn
+            </span>
+        </div>
+    </header>
+
+    <!-- Key Features Grid -->
+    <section id="features" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-14">
+            <h2 class="text-xs font-bold tracking-widest text-orange-400 uppercase mb-2">Core Capabilities</h2>
+            <h3 class="text-3xl sm:text-4xl font-bold text-white tracking-tight">Everything your AI needs to master LeetCode</h3>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Feature 1 -->
+            <div class="glass p-6 rounded-2xl border border-gray-800 hover:border-orange-500/40 transition group">
+                <div class="w-12 h-12 rounded-xl bg-orange-500/10 text-orange-400 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition">
+                    🌐
+                </div>
+                <h4 class="text-lg font-bold text-white mb-2">Dual-Site Multi-Platform</h4>
+                <p class="text-sm text-gray-400 leading-relaxed">
+                    First-class support for both <strong>leetcode.com</strong> (Global) and <strong>leetcode.cn</strong> (China), accommodating locale-specific GraphQL APIs and note management seamlessly.
+                </p>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="glass p-6 rounded-2xl border border-gray-800 hover:border-orange-500/40 transition group">
+                <div class="w-12 h-12 rounded-xl bg-orange-500/10 text-orange-400 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition">
+                    ⚡
+                </div>
+                <h4 class="text-lg font-bold text-white mb-2">Live Code Execution & Judging</h4>
+                <p class="text-sm text-gray-400 leading-relaxed">
+                    Run dry-run test cases with custom input (<code class="text-orange-300">run_code</code>) or officially submit code (<code class="text-orange-300">submit_solution</code>) with automated polling and status evaluation.
+                </p>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="glass p-6 rounded-2xl border border-gray-800 hover:border-orange-500/40 transition group">
+                <div class="w-12 h-12 rounded-xl bg-orange-500/10 text-orange-400 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition">
+                    🏆
+                </div>
+                <h4 class="text-lg font-bold text-white mb-2">Contests & Real-Time Schedules</h4>
+                <p class="text-sm text-gray-400 leading-relaxed">
+                    Query upcoming Weekly and Biweekly contests (<code class="text-orange-300">get_upcoming_contests</code>) with countdown timestamps, or pull historical contest performance and ratings.
+                </p>
+            </div>
+
+            <!-- Feature 4 -->
+            <div class="glass p-6 rounded-2xl border border-gray-800 hover:border-orange-500/40 transition group">
+                <div class="w-12 h-12 rounded-xl bg-orange-500/10 text-orange-400 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition">
+                    💬
+                </div>
+                <h4 class="text-lg font-bold text-white mb-2">MCP Prompts & Mock Interviews</h4>
+                <p class="text-sm text-gray-400 leading-relaxed">
+                    Includes prompt templates for non-spoiler progressive hints (<code class="text-orange-300">get_hint</code>), algorithmic explanations (<code class="text-orange-300">explain_problem</code>), code reviews, and mock interviews.
+                </p>
+            </div>
+
+            <!-- Feature 5 -->
+            <div class="glass p-6 rounded-2xl border border-gray-800 hover:border-orange-500/40 transition group">
+                <div class="w-12 h-12 rounded-xl bg-orange-500/10 text-orange-400 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition">
+                    🔌
+                </div>
+                <h4 class="text-lg font-bold text-white mb-2">Dual Transports (stdio & HTTP)</h4>
+                <p class="text-sm text-gray-400 leading-relaxed">
+                    Connect locally via standard input/output (<code class="text-orange-300">stdio</code>) with safe stderr logging, or host remotely as a stateful <code class="text-orange-300">Streamable HTTP</code> server with session management.
+                </p>
+            </div>
+
+            <!-- Feature 6 -->
+            <div class="glass p-6 rounded-2xl border border-gray-800 hover:border-orange-500/40 transition group">
+                <div class="w-12 h-12 rounded-xl bg-orange-500/10 text-orange-400 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition">
+                    📝
+                </div>
+                <h4 class="text-lg font-bold text-white mb-2">Lists, Notes & Code Snippets</h4>
+                <p class="text-sm text-gray-400 leading-relaxed">
+                    Manage favorite lists, problem reordering, Markdown problem notes (CN), and extract exact language boilerplate signatures across 20+ supported languages.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Client Configurator -->
+    <section id="configurator" class="py-16 bg-gray-950/60 border-y border-gray-800">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-10">
+                <h2 class="text-xs font-bold tracking-widest text-orange-400 uppercase mb-2">1-Click Integration</h2>
+                <h3 class="text-3xl font-bold text-white tracking-tight">Configure Your MCP Client</h3>
+                <p class="text-sm text-gray-400 mt-2">Select your AI client and preferences to generate copy-paste configuration.</p>
+            </div>
+
+            <div class="glass rounded-2xl p-6 sm:p-8 border border-gray-800 shadow-2xl">
+                <!-- Client Tabs -->
+                <div class="flex flex-wrap gap-2 mb-6 border-b border-gray-800 pb-4">
+                    <button onclick="setClient('claude')" id="tab-claude" class="client-tab px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-orange-600 text-white transition">Claude Desktop</button>
+                    <button onclick="setClient('cursor')" id="tab-cursor" class="client-tab px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-gray-900 text-gray-400 hover:text-white transition">Cursor</button>
+                    <button onclick="setClient('cline')" id="tab-cline" class="client-tab px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-gray-900 text-gray-400 hover:text-white transition">VS Code (Cline)</button>
+                    <button onclick="setClient('antigravity')" id="tab-antigravity" class="client-tab px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-gray-900 text-gray-400 hover:text-white transition">Antigravity</button>
+                    <button onclick="setClient('docker')" id="tab-docker" class="client-tab px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-gray-900 text-gray-400 hover:text-white transition">Docker / HTTP</button>
+                </div>
+
+                <!-- Option Controls -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                    <div>
+                        <label class="block text-xs font-medium text-gray-400 mb-1.5">LeetCode Region</label>
+                        <select id="cfg-site" onchange="renderConfig()" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-orange-500">
+                            <option value="global">leetcode.com (Global)</option>
+                            <option value="cn">leetcode.cn (China)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-400 mb-1.5">Authentication Mode</label>
+                        <select id="cfg-auth" onchange="renderConfig()" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-orange-500">
+                            <option value="public">Public (Read-Only, No Cookie)</option>
+                            <option value="auth">Authenticated (Submit & Notes)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-400 mb-1.5">Transport</label>
+                        <select id="cfg-transport" onchange="renderConfig()" class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-orange-500">
+                            <option value="stdio">stdio (Local CLI Process)</option>
+                            <option value="http">http (Streamable HTTP Server)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Code Container -->
+                <div class="relative">
+                    <div class="flex items-center justify-between px-4 py-2.5 bg-gray-900/90 rounded-t-xl border-t border-x border-gray-800 text-xs font-mono text-gray-400">
+                        <span id="config-filename">claude_desktop_config.json</span>
+                        <button onclick="copyCurrentConfig(this)" class="px-3 py-1 rounded-lg bg-orange-600/80 hover:bg-orange-600 text-white font-medium text-xs flex items-center space-x-1 transition">
+                            <span>Copy Config</span>
+                        </button>
+                    </div>
+                    <pre class="code-glass p-4 rounded-b-xl overflow-x-auto text-xs font-mono text-gray-200 border-b border-x border-gray-800"><code id="config-code">Loading config...</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tools, Prompts & Resources Explorer -->
+    <section id="tools" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-10">
+            <h2 class="text-xs font-bold tracking-widest text-orange-400 uppercase mb-2">API Reference</h2>
+            <h3 class="text-3xl font-bold text-white tracking-tight">Interactive Tool & Prompt Directory</h3>
+            <p class="text-sm text-gray-400 mt-2">Filter and explore the capabilities available to your AI agent.</p>
+        </div>
+
+        <!-- Filter Controls -->
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8">
+            <div class="flex flex-wrap gap-2" id="filter-pills">
+                <button onclick="filterCategory('all')" class="cat-pill active px-3.5 py-1.5 rounded-full text-xs font-semibold bg-orange-600 text-white transition">All (38)</button>
+                <button onclick="filterCategory('problems')" class="cat-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900 text-gray-400 hover:text-white transition">Problems</button>
+                <button onclick="filterCategory('submissions')" class="cat-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900 text-gray-400 hover:text-white transition">Code & Submissions</button>
+                <button onclick="filterCategory('contests')" class="cat-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900 text-gray-400 hover:text-white transition">Contests</button>
+                <button onclick="filterCategory('prompts')" class="cat-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900 text-gray-400 hover:text-white transition">Prompts</button>
+                <button onclick="filterCategory('resources')" class="cat-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900 text-gray-400 hover:text-white transition">Resources</button>
+            </div>
+            <div class="w-full sm:w-64">
+                <input type="text" id="tool-search" oninput="searchTools()" placeholder="Search tools or prompts..." class="w-full bg-gray-900 border border-gray-700 rounded-xl px-3.5 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-orange-500">
+            </div>
+        </div>
+
+        <!-- Tool Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="tools-container">
+            <!-- Cards rendered dynamically via JS -->
+        </div>
+    </section>
+
+    <!-- Architecture Section -->
+    <section id="architecture" class="py-16 bg-gray-950/60 border-t border-gray-800">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-xs font-bold tracking-widest text-orange-400 uppercase mb-2">System Design</h2>
+                <h3 class="text-3xl font-bold text-white tracking-tight">Transport & Execution Architecture</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- stdio Transport -->
+                <div class="glass p-6 rounded-2xl border border-gray-800">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <span class="px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-400 text-xs font-mono font-bold">stdio transport</span>
+                        <span class="text-xs text-gray-400">Default for Desktop AI</span>
+                    </div>
+                    <p class="text-sm text-gray-400 mb-4">
+                        Runs as a lightweight subprocess spawned directly by your desktop client. Standard input & output carry structured JSON-RPC messages, with application logging strictly routed to <code class="text-orange-400">stderr</code>.
+                    </p>
+                    <ul class="text-xs text-gray-400 space-y-2 font-mono">
+                        <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Zero port collisions or firewall issues</li>
+                        <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Automatic process lifecycle managed by client</li>
+                        <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Token redaction in logs to prevent leaks</li>
+                    </ul>
+                </div>
+
+                <!-- http Transport -->
+                <div class="glass p-6 rounded-2xl border border-gray-800">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-blue-400 text-xs font-mono font-bold">Streamable HTTP</span>
+                        <span class="text-xs text-gray-400">For Web & Docker</span>
+                    </div>
+                    <p class="text-sm text-gray-400 mb-4">
+                        Hosts a standalone HTTP server implementing the MCP Streamable HTTP protocol with Server-Sent Events (SSE) and stateful session routing for distributed environments.
+                    </p>
+                    <ul class="text-xs text-gray-400 space-y-2 font-mono">
+                        <li class="flex items-center gap-2"><span class="text-blue-400">✓</span> Multi-client shared server via Docker</li>
+                        <li class="flex items-center gap-2"><span class="text-blue-400">✓</span> Stateful session isolation with UUID tokens</li>
+                        <li class="flex items-center gap-2"><span class="text-blue-400">✓</span> Graceful shutdown via SIGTERM handlers</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LeetCode Ecosystem & Platforms -->
+    <section id="ecosystem" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-xs font-bold tracking-widest text-orange-400 uppercase mb-2">Ecosystem Analysis</h2>
+            <h3 class="text-3xl font-bold text-white tracking-tight">Connected Competitive Programming Ecosystem</h3>
+            <p class="text-sm text-gray-400 mt-2">Integrating LeetCode data with competitive ratings and analytics platforms.</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div class="glass p-5 rounded-2xl border border-gray-800">
+                <div class="text-2xl mb-2">🌐</div>
+                <h4 class="font-bold text-white text-sm mb-1">LeetCode Global</h4>
+                <p class="text-xs text-gray-400">Official leetcode.com GraphQL backend, contest ratings, submissions, editorials, and community solution discussions.</p>
+            </div>
+            <div class="glass p-5 rounded-2xl border border-gray-800">
+                <div class="text-2xl mb-2">🇨🇳</div>
+                <h4 class="font-bold text-white text-sm mb-1">LeetCode CN (力扣)</h4>
+                <p class="text-xs text-gray-400">Chinese localized platform featuring markdown problem notes, localized question slugs, and solution articles.</p>
+            </div>
+            <div class="glass p-5 rounded-2xl border border-gray-800">
+                <div class="text-2xl mb-2">📈</div>
+                <h4 class="font-bold text-white text-sm mb-1">Contest Predictors</h4>
+                <p class="text-xs text-gray-400">Integrates with contest scheduling structures used by LCCN Predictor and Clist for rating change tracking.</p>
+            </div>
+            <div class="glass p-5 rounded-2xl border border-gray-800">
+                <div class="text-2xl mb-2">🤖</div>
+                <h4 class="font-bold text-white text-sm mb-1">AI Coding Clients</h4>
+                <p class="text-xs text-gray-400">First-class compatibility with Claude Desktop, Cursor AI, VS Code Cline, and Google DeepMind Antigravity.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- GitHub Pages Setup Guide -->
+    <section class="py-12 bg-gray-950/80 border-t border-gray-800">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h4 class="text-lg font-bold text-white mb-2">Hosted on GitHub Pages</h4>
+            <p class="text-xs text-gray-400 mb-4 max-w-xl mx-auto">
+                This documentation page is hosted directly via GitHub Pages from the repository's <code class="text-orange-400">/docs</code> folder. To deploy or mirror to your fork:
+            </p>
+            <div class="code-glass p-3 rounded-xl inline-block text-left text-xs font-mono text-gray-300 border border-gray-800">
+                <span class="text-gray-500"># In your GitHub Repository Settings:</span><br>
+                <span>1. Go to <strong>Settings</strong> &gt; <strong>Pages</strong></span><br>
+                <span>2. Source: <strong>Deploy from a branch</strong></span><br>
+                <span>3. Branch: <strong>main</strong> / Folder: <strong>/docs</strong></span><br>
+                <span>4. Click <strong>Save</strong></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 border-t border-gray-800/80 text-center text-xs text-gray-500">
+        <p>© 2026 LeetCode MCP Server Project • Released under the MIT License</p>
+        <p class="mt-1">Built with Model Context Protocol (MCP) • Dual-site LeetCode GraphQL</p>
+    </footer>
+
+    <!-- Interactive Logic Script -->
+    <script>
+        const toolsData = [
+            // Problems
+            { name: "get_problem", category: "problems", desc: "Retrieves complete problem description, examples, constraints, hints, and metadata by titleSlug.", auth: false, site: "All", type: "Tool" },
+            { name: "get_daily_challenge", category: "problems", desc: "Fetches today's featured LeetCode Daily Challenge problem with full description.", auth: false, site: "All", type: "Tool" },
+            { name: "search_problems", category: "problems", desc: "Searches and filters problems by category, algorithmic tags, difficulty, and keywords.", auth: false, site: "All", type: "Tool" },
+            { name: "get_code_snippet", category: "problems", desc: "Extracts language-specific starter boilerplate code (Python, C++, Java, JS, Rust, Go, etc.) for a problem.", auth: false, site: "All", type: "Tool" },
+            { name: "get_random_problem", category: "problems", desc: "Picks a random problem filtered by difficulty (Easy/Medium/Hard) and topic tags.", auth: false, site: "All", type: "Tool" },
+            
+            // Submissions & Execution
+            { name: "run_code", category: "submissions", desc: "Executes code against test cases with custom input without submitting. Polls /check/ until finished.", auth: true, site: "All", type: "Tool" },
+            { name: "submit_solution", category: "submissions", desc: "Submits code for official judging. Returns runtime, memory percentile, and test evaluation.", auth: true, site: "All", type: "Tool" },
+            { name: "get_problem_submission_report", category: "submissions", desc: "Retrieves complete source code and runtime telemetry for a specific submission ID.", auth: true, site: "All", type: "Tool" },
+            { name: "get_all_submissions", category: "submissions", desc: "Paginated submission history for the authenticated user with status and language filters.", auth: true, site: "All", type: "Tool" },
+            { name: "get_recent_submissions", category: "submissions", desc: "Fetches any user's public recent submissions (both accepted and failed).", auth: false, site: "Global", type: "Tool" },
+            { name: "get_recent_ac_submissions", category: "submissions", desc: "Fetches any user's public accepted (AC) submissions.", auth: false, site: "All", type: "Tool" },
+            { name: "get_problem_progress", category: "submissions", desc: "Tracks which problems the authenticated user has attempted or solved.", auth: true, site: "All", type: "Tool" },
+
+            // Contests
+            { name: "get_upcoming_contests", category: "contests", desc: "Schedules of upcoming Weekly & Biweekly contests with countdown timestamps and URLs.", auth: false, site: "All", type: "Tool" },
+            { name: "get_user_contest_ranking", category: "contests", desc: "User's contest rating, global ranking, and participation performance history.", auth: false, site: "All", type: "Tool" },
+
+            // Solutions
+            { name: "list_problem_solutions", category: "problems", desc: "Lists community solution articles and discussions for a problem.", auth: false, site: "All", type: "Tool" },
+            { name: "get_problem_solution", category: "problems", desc: "Retrieves full text and code for a specific community solution article.", auth: false, site: "All", type: "Tool" },
+
+            // Prompts
+            { name: "explain_problem", category: "prompts", desc: "Structured prompt guiding AI to explain intuition, edge cases, and algorithmic complexity targets.", auth: false, site: "All", type: "Prompt" },
+            { name: "get_hint", category: "prompts", desc: "Progressive, non-spoiler hints (Level 1: Intuition, Level 2: Data Structure, Level 3: Pseudocode).", auth: false, site: "All", type: "Prompt" },
+            { name: "code_review", category: "prompts", desc: "Conducts a comprehensive code review checking time/space complexity and edge cases.", auth: false, site: "All", type: "Prompt" },
+            { name: "mock_interview", category: "prompts", desc: "Simulates an interactive technical coding interview in a FAANG-style persona.", auth: false, site: "All", type: "Prompt" },
+
+            // Resources
+            { name: "categories://problems/all", category: "resources", desc: "JSON array of all problem classification domains (algorithms, database, pandas, shell).", auth: false, site: "All", type: "Resource" },
+            { name: "tags://problems/all", category: "resources", desc: "JSON collection of all 70+ algorithm and data structure tags.", auth: false, site: "All", type: "Resource" },
+            { name: "langs://problems/all", category: "resources", desc: "Complete list of 20+ supported programming languages.", auth: false, site: "All", type: "Resource" },
+            { name: "problem://{titleSlug}", category: "resources", desc: "Dynamic resource template resolving problem details by slug.", auth: false, site: "All", type: "Resource" },
+            { name: "solution://{id}", category: "resources", desc: "Dynamic resource template resolving community solution articles.", auth: false, site: "All", type: "Resource" }
+        ];
+
+        let activeClient = 'claude';
+        let currentFilter = 'all';
+
+        function renderTools(tools) {
+            const container = document.getElementById('tools-container');
+            if (tools.length === 0) {
+                container.innerHTML = `<div class="col-span-full py-12 text-center text-gray-500 font-mono text-sm">No matching tools or prompts found.</div>`;
+                return;
+            }
+
+            container.innerHTML = tools.map(item => `
+                <div class="glass p-5 rounded-2xl border border-gray-800 hover:border-gray-700 transition flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-2.5">
+                            <span class="font-mono font-bold text-sm text-white">${item.name}</span>
+                            <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase ${
+                                item.type === 'Prompt' ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30' :
+                                item.type === 'Resource' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30' :
+                                'bg-orange-500/20 text-orange-400 border border-orange-500/30'
+                            }">${item.type}</span>
+                        </div>
+                        <p class="text-xs text-gray-400 leading-relaxed mb-4">${item.desc}</p>
+                    </div>
+                    <div class="pt-3 border-t border-gray-800/80 flex items-center justify-between text-[11px] font-mono text-gray-500">
+                        <span>Site: <strong class="text-gray-300 font-medium">${item.site}</strong></span>
+                        <span class="${item.auth ? 'text-amber-400' : 'text-emerald-400'}">${item.auth ? '🔒 Auth Required' : '🌐 Public'}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterCategory(cat) {
+            currentFilter = cat;
+            document.querySelectorAll('.cat-pill').forEach(el => {
+                el.classList.remove('bg-orange-600', 'text-white');
+                el.classList.add('bg-gray-900', 'text-gray-400');
+            });
+            event.target.classList.remove('bg-gray-900', 'text-gray-400');
+            event.target.classList.add('bg-orange-600', 'text-white');
+            applyFilters();
+        }
+
+        function searchTools() {
+            applyFilters();
+        }
+
+        function applyFilters() {
+            const query = document.getElementById('tool-search').value.toLowerCase().trim();
+            const filtered = toolsData.filter(item => {
+                const matchCat = currentFilter === 'all' || item.category === currentFilter;
+                const matchSearch = item.name.toLowerCase().includes(query) || item.desc.toLowerCase().includes(query);
+                return matchCat && matchSearch;
+            });
+            renderTools(filtered);
+        }
+
+        function setClient(client) {
+            activeClient = client;
+            document.querySelectorAll('.client-tab').forEach(el => {
+                el.classList.remove('bg-orange-600', 'text-white');
+                el.classList.add('bg-gray-900', 'text-gray-400');
+            });
+            document.getElementById(`tab-${client}`).classList.remove('bg-gray-900', 'text-gray-400');
+            document.getElementById(`tab-${client}`).classList.add('bg-orange-600', 'text-white');
+            renderConfig();
+        }
+
+        function renderConfig() {
+            const site = document.getElementById('cfg-site').value;
+            const auth = document.getElementById('cfg-auth').value;
+            const transport = document.getElementById('cfg-transport').value;
+            const codeEl = document.getElementById('config-code');
+            const fileEl = document.getElementById('config-filename');
+
+            let configText = '';
+
+            if (activeClient === 'claude') {
+                fileEl.innerText = 'claude_desktop_config.json';
+                const envObj = { LEETCODE_SITE: site };
+                if (auth === 'auth') envObj["LEETCODE_SESSION"] = "<YOUR_LEETCODE_SESSION_COOKIE>";
+                if (transport === 'http') envObj["LEETCODE_TRANSPORT"] = "http";
+
+                const config = {
+                    mcpServers: {
+                        leetcode: {
+                            command: "npx",
+                            args: ["-y", "@jinzcdev/leetcode-mcp-server"],
+                            env: envObj
+                        }
+                    }
+                };
+                configText = JSON.stringify(config, null, 2);
+            } else if (activeClient === 'cursor') {
+                fileEl.innerText = '.cursor/mcp.json';
+                const args = ["-y", "@jinzcdev/leetcode-mcp-server", "--site", site];
+                if (auth === 'auth') args.push("--session", "<YOUR_COOKIE>");
+                if (transport === 'http') args.push("--transport", "http");
+
+                configText = JSON.stringify({
+                    mcpServers: {
+                        leetcode: {
+                            command: "npx",
+                            args: args
+                        }
+                    }
+                }, null, 2);
+            } else if (activeClient === 'cline') {
+                fileEl.innerText = 'cline_mcp_settings.json';
+                configText = JSON.stringify({
+                    mcpServers: {
+                        leetcode: {
+                            command: "npx",
+                            args: ["-y", "@jinzcdev/leetcode-mcp-server"],
+                            env: {
+                                LEETCODE_SITE: site,
+                                LEETCODE_SESSION: auth === 'auth' ? "<YOUR_SESSION_COOKIE>" : ""
+                            },
+                            disabled: false,
+                            autoApprove: ["get_problem", "get_daily_challenge", "search_problems", "get_upcoming_contests", "get_code_snippet"]
+                        }
+                    }
+                }, null, 2);
+            } else if (activeClient === 'antigravity') {
+                fileEl.innerText = 'antigravity.json (Plugin / MCP Config)';
+                configText = JSON.stringify({
+                    mcpServers: {
+                        "leetcode-mcp-server": {
+                            command: "npx",
+                            args: ["-y", "@jinzcdev/leetcode-mcp-server", "--site", site],
+                            env: auth === 'auth' ? { LEETCODE_SESSION: "<YOUR_SESSION_COOKIE>" } : {}
+                        }
+                    }
+                }, null, 2);
+            } else if (activeClient === 'docker') {
+                fileEl.innerText = 'docker-compose.yml';
+                configText = `version: "3.8"
+services:
+  leetcode-mcp:
+    image: jinzcdev/leetcode-mcp-server:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - LEETCODE_SITE=${site}
+      - LEETCODE_TRANSPORT=http
+      - LEETCODE_HTTP_PORT=3000
+      ${auth === 'auth' ? '- LEETCODE_SESSION=<YOUR_SESSION_COOKIE>' : ''}
+    restart: unless-stopped`;
+            }
+
+            codeEl.innerText = configText;
+        }
+
+        function copySnippet(text, btn) {
+            navigator.clipboard.writeText(text);
+            const orig = btn.innerHTML;
+            btn.innerHTML = '<span>Copied!</span>';
+            setTimeout(() => { btn.innerHTML = orig; }, 1800);
+        }
+
+        function copyCurrentConfig(btn) {
+            const text = document.getElementById('config-code').innerText;
+            copySnippet(text, btn);
+        }
+
+        // Initialize
+        renderTools(toolsData);
+        renderConfig();
+    </script>
+</body>
+</html>
