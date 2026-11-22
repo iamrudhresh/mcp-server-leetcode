@@ -5,7 +5,8 @@ const logger = pino(
         level: "info",
         redact: [
             "cookie",
-            "x-csrftoken",
+            // Hyphenated keys need bracket notation, or pino throws at startup.
+            '["x-csrftoken"]',
             "csrfToken",
             "session",
             "LEETCODE_SESSION",
